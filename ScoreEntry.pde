@@ -23,8 +23,25 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
     this.score = score;
   }
   
+  void draw(int x, int y) {
+     textSize(16);
+     String stringOut = this.getName() + "---" + this.getScore();
+     float w = textWidth(stringOut) + 2;
+     
+     fill(255, 255, 255);
+     rect(x, y, w, 20);
+     fill(0, 0, 0);
+     
+     text(stringOut, x+1, y+16);
+  }
+  
   @Override
-    public int compareTo(ScoreEntry entry) {
-        return (int)(this.score - entry.getScore());
-    }
+  public int compareTo(ScoreEntry entry) {
+    return (int)(this.getScore() - entry.getScore());
+  }
+    
+  @Override
+  public String toString() {
+    return "[" + this.getName() + ", " + this.getScore() + "]";
+  }
 }
