@@ -3,6 +3,7 @@ import java.util.*;
 
 Serial myPort;  // The serial port
 String text = "";
+Map<String, ScoreEntry> scoreMap = new HashMap<>();
 
 void setup() {
     size(500, 500);
@@ -18,7 +19,7 @@ void draw() {
     while (myPort.available() > 0) {
         String inBuffer = myPort.readString();   
         if (inBuffer != null) {
-            print(inBuffer.replace("\n", "").replace("\r", ""));
+            scoreboardHandler(int(inBuffer.replace("\n", "").replace("\r", "")));
         }
     }
 }
