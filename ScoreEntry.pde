@@ -23,6 +23,13 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
     this.score = score;
   }
   
+  JSONObject getJsonObject() {
+    JSONObject json = new JSONObject();
+    json.setString("name", this.getName());
+    json.setInt("score", this.getScore());
+    return json;
+  }
+  
   void draw(int x, int y) {
      textSize(16);
      String stringOut = this.getName() + "---" + this.getScore();
