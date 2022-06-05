@@ -10,7 +10,11 @@ List<ScoreEntry> leaderboard = new ArrayList<>();
 PFont font;
 Textfield t;
 
+File selected;
+
 int currentScore;
+
+
 
 void setup() {
     size(500, 500);
@@ -21,13 +25,12 @@ void setup() {
     // Open the port you are using at the rate you want:
     port = new Serial(this, Serial.list()[0], 14500000);
     
-    
     cp5 = new ControlP5(this);
     font = createFont("arial", 20);
        
     textFont(font);
     
-    createInput("bruh");
+    selectInput("Select File", "loadFileToArray");
 }
 
 void draw() {
@@ -55,16 +58,64 @@ void draw() {
     }
 }
 
+void addToLeaderboard(String name, int currentScore) {
+    ScoreEntry entry = new ScoreEntry(name, currentScore);
+    leaderboard.add(entry); 
+}
+
 void controlEvent(ControlEvent theEvent) {
   if(theEvent.isAssignableFrom(Textfield.class)) {
-    String name = theEvent.getStringValue();
-    ScoreEntry entry = new ScoreEntry(name, currentScore);
-    leaderboard.add(entry);
+    addToLeaderboard(theEvent.getStringValue(), currentScore);
     t.remove();
     
     
     Collections.sort(leaderboard);
     Collections.reverse(leaderboard);
+    putArrayToFile();
     println(leaderboard + " ");
   }
+}
+
+void loadFileToArray(File selection) {
+  selected = selection;
+  if(selection.length() > 0) {
+    JSONArray values = loadJSONArray(selected);
+  
+    for (int i = 0; i < values.size(); i++) {
+      
+      JSONObject entry = values.getJSONObject(i); 
+  
+      String name = entry.getString("name");
+      int score = entry.getInt("score");
+      addToLeaderboard(name, score);
+      println(name + ", " + score);
+    }
+  }
+}
+
+void putArrayToFile() {
+  try {
+  PrintWriter writer = new PrintWriter(selected);
+  writer.print("");
+  writer.close();
+  } 
+  catch(Exception FileNotFoundException) {
+    println("How did you even manage to do that");
+  }
+
+  
+  JSONArray values = new JSONArray();
+  int i = 0;
+  for (ScoreEntry entry: leaderboard) {
+
+    JSONObject JSONEntry = new JSONObject();
+
+    JSONEntry.setString("name", entry.getName());
+    JSONEntry.setInt("score", entry.getScore());
+
+    values.setJSONObject(i, JSONEntry);
+    i++;
+  }
+
+  saveJSONArray(values, selected.getAbsolutePath());
 }
