@@ -17,7 +17,7 @@ int currentScore;
 
 
 void setup() {
-    size(500, 500);
+    size(500, displayHeight);
   
     // List all the available serial ports
     printArray(Serial.list());
@@ -52,7 +52,7 @@ void draw() {
     if(leaderboard.size() > 0) {
       int i = 0;
       for(ScoreEntry entry: leaderboard) {
-         entry.draw(0, i*20);
+         entry.draw(0, i*30);
          i++;
       }
     }

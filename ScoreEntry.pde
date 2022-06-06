@@ -31,15 +31,14 @@ public class ScoreEntry implements Comparable<ScoreEntry> {
   }
   
   void draw(int x, int y) {
-     textSize(16);
-     String stringOut = this.getName() + "---" + this.getScore();
-     float w = textWidth(stringOut) + 2;
-     
+     textSize(23);
+      
      fill(255, 255, 255);
-     rect(x, y, w, 20);
-     fill(0, 0, 0);
+     stroke(255,255,255);
+     line(x + textWidth(this.getName()) + 10, y + 14, width - textWidth(str(this.getScore())) - 15, y + 14);
      
-     text(stringOut, x+1, y+16);
+     text(this.getName(), x + 5, y+20);
+     text(this.getScore(), width - textWidth(str(this.getScore())) - 10, y+20);
   }
   
   @Override
